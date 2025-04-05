@@ -3,12 +3,7 @@
 This project is a submission for the Speer Technologies Android Developer Assessment.  
 It is built using **Kotlin**, **Jetpack Compose**, and **MVVM architecture** with **GitHub REST API** integration.
 
-
-## VIDEO DEMO
-
-
-https://github.com/user-attachments/assets/a6087584-ee32-4b67-b8c7-27cd2da6d356
-
+Video Demo: https://drive.google.com/drive/folders/1_yJsm2r2hKesWWVVVd8QR4t5nQqrztSl?usp=drive_link
 
 ---
 
