@@ -103,4 +103,10 @@ dependencies {
 
     implementation("io.coil-kt:coil-compose:2.5.0")
 
+    val nav_version = "2.8.9"
+
+    implementation("androidx.navigation:navigation-compose:$nav_version")
+
+    implementation("com.google.code.gson:gson:2.12.1")
 }
+
