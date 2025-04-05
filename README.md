@@ -3,6 +3,13 @@
 This project is a submission for the Speer Technologies Android Developer Assessment.  
 It is built using **Kotlin**, **Jetpack Compose**, and **MVVM architecture** with **GitHub REST API** integration.
 
+
+## VIDEO DEMO
+
+
+https://github.com/user-attachments/assets/a6087584-ee32-4b67-b8c7-27cd2da6d356
+
+
 ---
 
 ## 👤 Candidate
@@ -11,6 +18,10 @@ It is built using **Kotlin**, **Jetpack Compose**, and **MVVM architecture** wit
 📍 Toronto, ON  
 📧 syed-rahman@outlook.com  
 🔗 [LinkedIn: syedrh](https://www.linkedin.com/in/syedrh)
+RESUME
+
+[syed_rahman_mobile_2024.pdf](https://github.com/user-attachments/files/19617840/syed_rahman_mobile_2024.pdf)
+
 ---
 
 ## 🛠 Tech Stack
