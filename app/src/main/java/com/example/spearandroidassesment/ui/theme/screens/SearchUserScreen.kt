@@ -12,6 +12,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
@@ -23,7 +24,7 @@ import com.example.spearandroidassesment.viewmodel.SearchUserViewModel
 import com.google.gson.Gson
 
 @Composable
-fun SearchUserScreen(navController: NavController, modifier: Modifier = Modifier) {
+fun SearchUserScreen(navController: NavController) {
     val viewModel: SearchUserViewModel = viewModel()
 
     var query by rememberSaveable { mutableStateOf("") }
@@ -32,50 +33,58 @@ fun SearchUserScreen(navController: NavController, modifier: Modifier = Modifier
     val isLoading by viewModel.isLoading.collectAsState()
     val error by viewModel.error.collectAsState()
 
-    Column(
-        modifier = modifier
+    val focusManager = LocalFocusManager.current
+
+    Box(
+        modifier = Modifier
             .fillMaxSize()
             .padding(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
+        contentAlignment = Alignment.Center
     ) {
-        TextField(
-            value = query,
-            onValueChange = { query = it },
-            placeholder = { Text("Enter GitHub username") },
-            modifier = Modifier.fillMaxWidth(),
-            singleLine = true,
-            keyboardOptions = KeyboardOptions.Default.copy(
-                imeAction = ImeAction.Done // or ImeAction.Search
-            ),
-        )
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(16.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 5.dp)
+        ) {
+            Text(
+                text = "Search For A User On GitHub",
+                style = MaterialTheme.typography.titleLarge
+            )
 
-        Spacer(modifier = Modifier.height(8.dp))
-
-        Button(onClick = { viewModel.searchUser(query) }) {
-            Text("Search")
-        }
-
-        Spacer(modifier = Modifier.height(24.dp))
-
-        when {
-            isLoading -> {
-                CircularProgressIndicator()
-            }
-            error != null -> {
-                Text(text = error ?: "Something went wrong", color = MaterialTheme.colorScheme.error)
-            }
-            user != null -> {
-                val u = user!!
-                println("SYED: ${u}")
-                UserProfileCard(
-                    user = u,
-                    onClick = {
-                        val userJson = Uri.encode(Gson().toJson(u))
-                        navController.navigate("follow/$userJson")
+            TextField(
+                value = query,
+                onValueChange = { query = it },
+                placeholder = { Text("Enter A GitHub Username") },
+                modifier = Modifier.fillMaxWidth(),
+                singleLine = true,
+                keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Search),
+                keyboardActions = KeyboardActions(
+                    onSearch = {
+                        focusManager.clearFocus()
+                        viewModel.searchUser(query)
                     }
                 )
+            )
 
+            when {
+                isLoading -> CircularProgressIndicator()
+                error != null -> Text(
+                    text = error ?: "Something went wrong",
+                    color = MaterialTheme.colorScheme.error
+                )
+                user != null -> {
+                    UserProfileCard(
+                        user = user!!,
+                        onClick = {
+                            val userJson = Uri.encode(Gson().toJson(user))
+                            navController.navigate("follow/$userJson")
+                        }
+                    )
+                }
             }
         }
     }
 }
+
