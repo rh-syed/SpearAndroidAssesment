@@ -18,9 +18,7 @@ https://github.com/user-attachments/assets/a6087584-ee32-4b67-b8c7-27cd2da6d356
 📍 Toronto, ON  
 📧 syed-rahman@outlook.com  
 🔗 [LinkedIn: syedrh](https://www.linkedin.com/in/syedrh)
-RESUME
 
-[syed_rahman_mobile_2024.pdf](https://github.com/user-attachments/files/19617840/syed_rahman_mobile_2024.pdf)
 
 ---
 
