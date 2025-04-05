@@ -1,5 +1,7 @@
 package com.example.spearandroidassesment.ui.screens
 
+import android.net.Uri
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -21,15 +23,17 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.runtime.saveable.rememberSaveable
 import com.example.spearandroidassesment.model.GithubUser
 import com.example.spearandroidassesment.ui.components.UserProfileCard
+import com.google.gson.Gson
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FollowScreen(user: GithubUser, navController: NavController) {
     val viewModel: FollowListViewModel = viewModel()
 
-    var selectedTab by remember { mutableStateOf(0) }
+    var selectedTab by rememberSaveable { mutableStateOf(0) }
 
     val tabs = listOf("Followers", "Following")
 
@@ -75,7 +79,16 @@ fun FollowScreen(user: GithubUser, navController: NavController) {
                 val list = if (selectedTab == 0) followers else following
                 LazyColumn(Modifier.fillMaxSize().padding(16.dp)) {
                     items(list) { user ->
-                        Row(Modifier.fillMaxWidth().padding(vertical = 8.dp)) {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clickable {
+                                    val userJson = Uri.encode(Gson().toJson(user))
+                                    navController.navigate("follow/$userJson")
+                                }
+                                .padding(vertical = 8.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ){
                             AsyncImage(
                                 model = user.avatarUrl,
                                 contentDescription = null,
