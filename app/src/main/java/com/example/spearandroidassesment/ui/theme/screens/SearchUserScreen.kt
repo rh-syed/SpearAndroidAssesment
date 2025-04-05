@@ -20,6 +20,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.example.spearandroidassesment.ui.components.UserProfileCard
+import com.example.spearandroidassesment.ui.components.UserProfileSkeleton
 import com.example.spearandroidassesment.viewmodel.SearchUserViewModel
 import com.google.gson.Gson
 
@@ -69,7 +70,7 @@ fun SearchUserScreen(navController: NavController) {
             )
 
             when {
-                isLoading -> CircularProgressIndicator()
+                isLoading -> UserProfileSkeleton()
                 error != null -> Text(
                     text = error ?: "Something went wrong",
                     color = MaterialTheme.colorScheme.error

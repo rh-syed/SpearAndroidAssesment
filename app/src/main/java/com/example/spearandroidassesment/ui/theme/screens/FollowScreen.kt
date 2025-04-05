@@ -25,6 +25,7 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.saveable.rememberSaveable
 import com.example.spearandroidassesment.model.GithubUser
+import com.example.spearandroidassesment.ui.components.UserListItemSkeleton
 import com.example.spearandroidassesment.ui.components.UserProfileCard
 import com.google.gson.Gson
 
@@ -71,8 +72,14 @@ fun FollowScreen(user: GithubUser, navController: NavController) {
         }
 
         when {
-            isLoading -> Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                CircularProgressIndicator()
+            isLoading -> LazyColumn(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(horizontal = 16.dp, vertical = 8.dp)
+            ) {
+                items(10) { // show 10 shimmer items
+                    UserListItemSkeleton()
+                }
             }
             error != null -> Text("Error: $error", Modifier.padding(16.dp))
             else -> {
