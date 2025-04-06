@@ -1,5 +1,6 @@
 package com.example.spearandroidassesment.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.spearandroidassesment.model.GithubUser
@@ -24,7 +25,33 @@ class FollowListViewModel : ViewModel() {
     private val _error = MutableStateFlow<String?>(null)
     val error: StateFlow<String?> = _error
 
+    private val _currentUser = MutableStateFlow<GithubUser?>(null)
+    val currentUser: StateFlow<GithubUser?> = _currentUser
+
+
+    fun loadUser(username: String) {
+        _followers.value = emptyList() // clear previous list
+        viewModelScope.launch {
+            try {
+                val response = repository.searchUser(username)
+                if (response.isSuccessful) {
+                    _currentUser.value = response.body()
+                    Log.d("ViewModel", "Fetched user: ${_currentUser}")
+                }
+            } catch (e: Exception) {
+                _error.value = "Network error: ${e.localizedMessage}"
+            } finally {
+                _isLoading.value = false
+            }
+        }
+    }
+
+    fun setCurrentUser(user: GithubUser) {
+        _currentUser.value = user
+    }
+
     fun loadFollowers(username: String) {
+        _followers.value = emptyList() // clear previous list
         viewModelScope.launch {
             _isLoading.value = true
             _error.value = null
@@ -43,7 +70,12 @@ class FollowListViewModel : ViewModel() {
         }
     }
 
+    fun clearCurrentUser() {
+        _currentUser.value = null
+    }
+
     fun loadFollowing(username: String) {
+        _following.value = emptyList() // clear previous list
         viewModelScope.launch {
             _isLoading.value = true
             _error.value = null

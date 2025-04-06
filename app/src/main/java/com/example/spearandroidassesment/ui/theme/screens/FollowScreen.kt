@@ -27,6 +27,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import com.example.spearandroidassesment.model.GithubUser
 import com.example.spearandroidassesment.ui.components.UserListItemSkeleton
 import com.example.spearandroidassesment.ui.components.UserProfileCard
+import com.example.spearandroidassesment.ui.components.UserProfileSkeleton
 import com.google.gson.Gson
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -38,9 +39,24 @@ fun FollowScreen(user: GithubUser, navController: NavController) {
 
     val tabs = listOf("Followers", "Following")
 
+    // Load user only once when user changes
+    LaunchedEffect(user.login) {
+        viewModel.clearCurrentUser()
+
+        if (user.bio == null || user.followers == 0) {
+            viewModel.loadUser(user.login)
+        } else {
+            viewModel.setCurrentUser(user)
+        }
+    }
+
+//Load followers/following when tab changes
     LaunchedEffect(selectedTab, user.login) {
-        if (selectedTab == 0) viewModel.loadFollowers(user.login)
-        else viewModel.loadFollowing(user.login)
+        if (selectedTab == 0) {
+            viewModel.loadFollowers(user.login)
+        } else {
+            viewModel.loadFollowing(user.login)
+        }
     }
 
     val followers by viewModel.followers.collectAsState()
@@ -58,8 +74,16 @@ fun FollowScreen(user: GithubUser, navController: NavController) {
             }
         )
 
+        val currentUser by viewModel.currentUser.collectAsState()
+
+        if (currentUser != null) {
+            UserProfileCard(user = currentUser!!)
+        } else {
+            UserProfileSkeleton()
+        }
+
         // Show current user card (no need to load it again!)
-        UserProfileCard(user = user)
+        //UserProfileCard(user = user)
 
         TabRow(selectedTabIndex = selectedTab) {
             tabs.forEachIndexed { index, title ->
